@@ -49,8 +49,8 @@ describe("Testing cities.service file.", function(){
         //         }
         //     })
 
-            //expect(() => citiesService.getCityByZipCode(-1)).to.throw(new NotFoundError('No cities found!'))
-            // (() => citiesService.getCityByZipCode(-1)).should.throw(new NotFoundError('No cities found!'))
+        //     expect(() => citiesService.getCityByZipCode(-1)).to.throw(new NotFoundError('No cities found!'))
+        //     (() => citiesService.getCityByZipCode(-1)).should.throw(new NotFoundError('No cities found!'))
         // })
     })
 });
