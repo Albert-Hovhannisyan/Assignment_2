@@ -8,49 +8,44 @@ chai.use(chaiAsPromised);
 chai.should();
 const expect = chai.expect;
 
-const wrongObject = () => {throw new Error("Error")}
+testObject = {
+    country: faker.address.country(),
+    places: [
+        {
+            'place name': faker.address.cityName(),
+            'state abbreviation': faker.address.stateAbbr()
+        }
+    ]
+};
 
 describe("Testing cities.service file.", function(){
     describe("Testing the getCityByZipCode function.", function(){
 
         it("Returns city by it's zipcode correctly.", function(){
 
-            testObject = {
-                country: faker.address.country(),
-                places: [
-                    {
-                        'place name': faker.address.cityName(),
-                        'state abbreviation': faker.address.stateAbbr()
-                    }
-                ]
-            };
 
             citiesService.__set__('citiesRepository', {
-                getCityDataByZipCode: async function(zipcode){    
+                getCityDataByZipCode: async function(zipcode){  
                     return testObject.places[0]['place name'] + ', ' + 
                     testObject.places[0]['state abbreviation'] + ', ' +  
-                    testObject.country}
+                    testObject.country
+                }
             })
 
-            citiesService.getCityByZipCode(11111).should.eventually.be.equal
+            citiesService.getCityByZipCode(11111).should.eventually.equal
             (testObject.places[0]['place name'] + ', ' + 
             testObject.places[0]['state abbreviation'] + ', ' +  
             testObject.country);
         })
 
-        // it("Returns city by it's zipcode correctly.", function(){
-        //     citiesService.__set__('citiesRepository', {
-        //         getCityDataByZipCode: async function(zipcode){
-        //             //return wrongObject();
-        //             return new Promise((resolve, reject) => {
-        //                 reject(new NotFoundError('No cities found!'))
-        //             });
-        //             // throw new NotFoundError("Error")
-        //         }
-        //     })
+        it("Throws an error if something goes wrong.", function(){
+            citiesService.__with__('citiesRepository', {
+                getCityDataByZipCode: async function(zipcode){
+                    return new Promise.reject(new Error('Error!'))
+                }
+            })
 
-        //     expect(() => citiesService.getCityByZipCode(-1)).to.throw(new NotFoundError('No cities found!'))
-        //     (() => citiesService.getCityByZipCode(-1)).should.throw(new NotFoundError('No cities found!'))
-        // })
+            (() => citiesService.getCityByZipCode(-1)).should.eventually.throw(new NotFoundError('No cities found!'))
+        })
     })
 });
