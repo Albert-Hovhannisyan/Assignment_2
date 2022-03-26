@@ -6,7 +6,6 @@ const chaiAsPromised = require('chai-as-promised');
 const NotFoundError = require('../common/errors/not-found.error');
 chai.use(chaiAsPromised);
 chai.should();
-const expect = chai.expect;
 
 testObject = {
     country: faker.address.country(),
