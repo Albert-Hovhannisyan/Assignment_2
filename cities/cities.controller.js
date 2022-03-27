@@ -1,11 +1,11 @@
 const express = require('express');
 const citiesService = require('./cities.service');
-const errorHandler = require('express-async-handler');
+const asyncHandler = require('express-async-handler');
 const BadRequestError = require('../common/errors/bad-request.error');
 
 const route = express.Router();
 
-route.get('/:zipCode/', errorHandler(async (req, res) => {
+route.get('/:zipCode/', asyncHandler(async (req, res) => {
     const zipcode = req.params['zipCode'];
 
     if(isNaN(zipcode) || zipcode <= 0){
