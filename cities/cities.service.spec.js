@@ -3,7 +3,7 @@ const citiesService = rewire('./cities.service');
 const {faker} = require('@faker-js/faker');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const NotFoundError = require('../common/errors/not-found.error');
+expect = require('chai').expect
 chai.use(chaiAsPromised);
 chai.should();
 
@@ -17,34 +17,40 @@ testObject = {
     ]
 };
 
+// testObject = {
+//     country: "United States",
+//     places: [
+//         {
+//             'place name': "San Francisco",
+//             'state abbreviation': "CA"
+//         }
+//     ]
+// };
+
+citiesService.__set__('citiesRepository', {
+    getCityDataByZipCode: async function(zipcode){ 
+        if(zipcode == 1){
+            return testObject.places[0]['place name'] + ', ' + 
+            testObject.places[0]['state abbreviation'] + ', ' +  
+            testObject.country
+        }
+        else if(zipcode == 0){
+            throw new Error('Error')
+        }
+    }
+})
+
 describe("Testing cities.service file.", function(){
     describe("Testing the getCityByZipCode function.", function(){
 
-        it("Returns city by it's zipcode correctly.", function(){
-
-
-            citiesService.__set__('citiesRepository', {
-                getCityDataByZipCode: async function(zipcode){  
-                    return testObject.places[0]['place name'] + ', ' + 
-                    testObject.places[0]['state abbreviation'] + ', ' +  
-                    testObject.country
-                }
-            })
-
-            citiesService.getCityByZipCode(11111).should.eventually.equal
-            (testObject.places[0]['place name'] + ', ' + 
-            testObject.places[0]['state abbreviation'] + ', ' +  
-            testObject.country);
+        it("Returns city by it's zipcode correctly.", async function(){
+            await citiesService.getCityByZipCode(1).should.eventually.be.equal(testObject.places[0]['place name'] + ', ' + 
+                                                                               testObject.places[0]['state abbreviation'] + ', ' +  
+                                                                               testObject.country);
         })
 
-        it("Throws an error if something goes wrong.", function(){
-            citiesService.__with__('citiesRepository', {
-                getCityDataByZipCode: async function(zipcode){
-                    return new Promise.reject(new Error('Error!'))
-                }
-            })
-
-            (() => citiesService.getCityByZipCode(-1)).should.eventually.throw(new NotFoundError('No cities found!'))
+        it("Throws an error with correct message when something goes wrong.", async function(){
+            await expect(citiesService.getCityByZipCode(0)).to.be.rejectedWith('No cities found!')
         })
     })
 });
