@@ -3,8 +3,8 @@ const citiesService = rewire('./cities.service');
 const {faker} = require('@faker-js/faker');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-expect = require('chai').expect
 const NotFoundError = require('../common/errors/not-found.error');
+const { expect } = require('chai');
 chai.use(chaiAsPromised);
 chai.should();
 
@@ -19,17 +19,6 @@ chai.should();
 // };
 
 let result = faker.address.cityName() + ', ' + faker.address.stateAbbr() + ', ' +  faker.address.country()
-
-
-// testObject = {
-//     country: "United States",
-//     places: [
-//         {
-//             'place name': "San Francisco",
-//             'state abbreviation': "CA"
-//         }
-//     ]
-// };
 
 citiesService.__set__('citiesRepository', {
     getCityDataByZipCode: async function(zipcode){ 
@@ -50,7 +39,11 @@ describe("Testing cities.service file.", function(){
         })
 
         it("Throws a correct error when something goes wrong.", async function(){
-            await expect(citiesService.getCityByZipCode(0)).to.be.rejectedWith(NotFoundError)
+            await expect(citiesService.getCityByZipCode(0)).to.eventually.be.rejectedWith(NotFoundError)
+        })
+
+        it("Throws a correct message when something goes wrong.", async function(){
+            await expect(citiesService.getCityByZipCode(0)).to.eventually.be.rejectedWith('No cities found!')
         })
     })
 });
