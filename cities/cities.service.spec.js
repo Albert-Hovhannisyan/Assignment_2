@@ -4,7 +4,7 @@ const {faker} = require('@faker-js/faker');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const NotFoundError = require('../common/errors/not-found.error');
-const { expect } = require('chai');
+const {expect} = require('chai');
 chai.use(chaiAsPromised);
 chai.should();
 
