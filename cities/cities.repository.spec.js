@@ -22,14 +22,12 @@ describe("Testing cities.repository file.", function(){
         }
     };
 
-    describe("Testing the getCityDataByZipCode function.", function(){
+    describe("Testing the axios.get of getCityDataByZipCode function.", function(){
             it("Returns data for a given zipcode correctly and is called exactly once.", async function(){             
                 sinon.stub(axios, 'get').returns(obj)
+                spy = chai.spy.on(axios, 'get');
                 result = await citiesRepository.getCityDataByZipCode(1)
                 result.should.be.equal("San Francisco, CA, United States");
-
-                spy = chai.spy(citiesRepository.getCityDataByZipCode(1))
-                spy();
                 spy.should.have.been.called.once;
             })
         })
