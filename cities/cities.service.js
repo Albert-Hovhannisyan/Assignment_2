@@ -9,7 +9,6 @@ citiesService = {getCityByZipCode: asyncHandler(async function (zipcode) {
     catch(err){
         throw new NotFoundError('No cities found!');
     }
-
     return result;
     })
 };
