@@ -37,7 +37,7 @@ describe("Testing cities.service file.", function(){
             await citiesService.getCityByZipCode(0).should.eventually.be.rejectedWith('No cities found!');
         })
 
-        it("Throws a correct message when something goes wrong.", async function(){
+        it("Is called exactly once.", async function(){
             let spy = chai.spy(citiesService.getCityByZipCode(1));
             spy();
             spy.should.have.been.called.once;
