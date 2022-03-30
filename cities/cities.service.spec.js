@@ -25,19 +25,19 @@ citiesService.__set__('citiesRepository', {
 describe("Testing cities.service file.", function(){
     describe("Testing the getCityByZipCode function.", function(){
 
-        it("Returns city by it's zipcode correctly.", async function(){
-            await citiesService.getCityByZipCode(1).should.eventually.be.equal(fake_result);
+        it("Returns city by it's zipcode correctly.", function(){
+            citiesService.getCityByZipCode(1).should.eventually.be.equal(fake_result);
         })
 
-        it("Throws a correct error when something goes wrong.", async function(){
-            await citiesService.getCityByZipCode(0).should.eventually.be.rejectedWith(NotFoundError);
+        it("Throws a correct error when something goes wrong.", function(){
+            citiesService.getCityByZipCode(0).should.eventually.be.rejectedWith(NotFoundError);
         })
 
-        it("Throws a correct message when something goes wrong.", async function(){
-            await citiesService.getCityByZipCode(0).should.eventually.be.rejectedWith('No cities found!');
+        it("Throws a correct message when something goes wrong.", function(){
+            citiesService.getCityByZipCode(0).should.eventually.be.rejectedWith('No cities found!');
         })
 
-        it("Is called exactly once.", async function(){
+        it("Is called exactly once.", function(){
             let spy = chai.spy(citiesService.getCityByZipCode(1));
             spy();
             spy.should.have.been.called.once;
