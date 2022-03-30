@@ -9,7 +9,7 @@ route.get('/:zipCode/', asyncHandler(async (req, res) => {
     const zipcode = req.params['zipCode'];
 
     if(isNaN(zipcode) || zipcode <= 0){
-        throw new BadRequestError('Please enter a valid zipcode using numbers!');
+        throw new BadRequestError('Please enter a valid zipcode using only natural numbers!');
     }
 
     const result = await citiesService.getCityByZipCode(zipcode);
